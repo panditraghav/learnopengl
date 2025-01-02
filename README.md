@@ -11,4 +11,4 @@
 - [X] Compile and link shaders, create shader program
 - [X] Link vertex attributes using `glVertexAttributePointer()` and `glEnableVertexAttribArray()`
 - [X] Vertex array object which stores `glVertexAttributePointer()` and `glEnableVertexAttribArray()` calls along with the VertexBuffer
-- [ ] ElementBufferObject - Stores indices that opengl uses to decide what vertices to draw
+- [X] ElementBufferObject - Stores indices that opengl uses to decide what vertices to draw
