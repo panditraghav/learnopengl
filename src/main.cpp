@@ -158,7 +158,7 @@ int main() {
 
   // WARNING: do NOT unbind the EBO while a VAO is active as the bound element
   // buffer object IS stored in the VAO; keep the EBO bound.
-  //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
   // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO,
   // but this rarely happens.

@@ -1,7 +1,7 @@
 project('lopengl', 'cpp')
 cmake = import('cmake')
 
-src = ['main.cpp']
+src = ['src/main.cpp']
 inc = []
 
 glfw = cmake.subproject('glfw-3.4')
