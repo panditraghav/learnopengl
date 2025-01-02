@@ -1,3 +1,7 @@
 [*.cpp]
 indent_size = 2
 indent_style = space
+
+[*.hpp]
+indent_size = 2
+indent_style = space
