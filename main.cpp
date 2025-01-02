@@ -13,16 +13,20 @@ const unsigned int SCR_HEIGHT = 600;
 const char *vertexShaderSource =
     "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
+    "layout (location = 1) in vec3 colors;\n"
+    "out vec3 vertexColor;\n"
     "void main()\n"
     "{\n"
     "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+    "   vertexColor = colors;\n"
     "}\0";
 const char *fragmentShaderSource =
     "#version 330 core\n"
     "out vec4 FragColor;\n"
+    "in vec3 vertexColor;\n"
     "void main()\n"
     "{\n"
-    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    "   FragColor = vec4(vertexColor, 1.0f);\n"
     "}\n\0";
 
 int main() {
@@ -100,15 +104,14 @@ int main() {
   // set up vertex data (and buffer(s)) and configure vertex attributes
   // ------------------------------------------------------------------
   float vertices[] = {
-     0.5f,  0.5f, 0.0f,  // top right
-     0.5f, -0.5f, 0.0f,  // bottom right
-    -0.5f, -0.5f, 0.0f,  // bottom left
-    -0.5f,  0.5f, 0.0f   // top left 
+    // Vertices         // Colors
+    -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom left
+     0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
+     0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // top right
   };
 
   unsigned int indices[] = {  // note that we start from 0!
     0, 1, 2,   // first triangle
-    2, 0, 3    // second triangle
   };
 
   unsigned int VBO; // Vertex Buffer Object, array buffer to store data on GPU
@@ -142,8 +145,11 @@ int main() {
    * arg4: Boolean specify data should be normalized or not
    * arg5: Strides, tells space between consecutive vertex attributes.
    */
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
+
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+  glEnableVertexAttribArray(1);
 
   // Unbind buffer
   // note that this is allowed, the call to glVertexAttribPointer registered VBO as the
@@ -171,14 +177,14 @@ int main() {
 
     // render
     // ------
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(shaderProgram);
 
     glBindVertexArray(VAO);
     /*glDrawArrays(GL_TRIANGLES, 0, 3);*/
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 
     /*glBindVertexArray(sVAO);*/
@@ -203,7 +209,7 @@ int main() {
 // frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window) {
-  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS )
     glfwSetWindowShouldClose(window, true);
 }
 
