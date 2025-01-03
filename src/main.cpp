@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <glad/glad.h>
 
 #include <GLFW/glfw3.h>
@@ -12,6 +13,9 @@ void processInput(GLFWwindow *window);
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+
+float mixA = 0.2f;
+float mixChangeRate = 0.02f;
 
 int main() {
   // glfw: initialize and configure
@@ -50,10 +54,10 @@ int main() {
   // ------------------------------------------------------------------
   float vertices[] = {
     // positions          // colors           // texture coords
-    0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   2.0f, 2.0f,   // top right
-    0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   2.0f, 0.0f,   // bottom right
+    0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+    0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
     -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 2.0f    // top left 
+    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
   };
 
   unsigned int indices[] = {  // note that we start from 0!
@@ -191,6 +195,7 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     ourShader.use();
+    ourShader.setFloat(std::string("mixA"), mixA);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,texture1);
@@ -225,8 +230,13 @@ int main() {
 // frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window) {
-  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS )
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS ){
     glfwSetWindowShouldClose(window, true);
+  }else if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
+    mixA = std::min(mixA + mixChangeRate, 1.0f);
+  }else if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
+    mixA = std::max(mixA - mixChangeRate, 0.0f);
+  }
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback
