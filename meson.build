@@ -1,7 +1,7 @@
 project('lopengl', 'cpp')
 cmake = import('cmake')
 
-src = ['src/main.cpp', 'src/shader.cpp']
+src = ['src/main.cpp', 'src/shader.cpp', 'src/stb_image.cpp']
 inc = ['src/']
 
 glfw = cmake.subproject('glfw-3.4')
